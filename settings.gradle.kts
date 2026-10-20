@@ -24,3 +24,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "TioTec Preventivo"
 include(":app")
+include(":app")
