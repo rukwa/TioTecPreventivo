@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    namespace = "com.duoc.tiotecpreventivo"
+    namespace = "cl.duoc.tiotec"
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
-        applicationId = "com.duoc.tiotecpreventivo"
+        applicationId = "cl.duoc.tiotec"
         minSdk = 26
         targetSdk = 37
         versionCode = 1
