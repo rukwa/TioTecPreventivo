@@ -53,4 +53,18 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
+
+    // Navegación entre pantallas
+    implementation(libs.androidx.navigation.compose)
+    // ViewModel en Compose y collectAsStateWithLifecycle
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    // Persistencia local con Room (SQLite)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+    // Notificaciones programadas
+    implementation(libs.androidx.work.runtime.ktx)
+    // Íconos de Material (Error, Checklist, Shield, PhoneAndroid, etc.)
+    implementation(libs.androidx.compose.material.icons.extended)
 }
