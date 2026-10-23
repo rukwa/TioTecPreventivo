@@ -1,5 +1,8 @@
 package cl.duoc.tiotec.ui.navigation
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -18,12 +21,16 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import cl.duoc.tiotec.ui.components.AccionProvisoria
 import cl.duoc.tiotec.ui.components.PantallaEnConstruccion
+import cl.duoc.tiotec.ui.screens.aprende.AprendeScreen
+import cl.duoc.tiotec.ui.screens.asistencia.AsistenciaScreen
+import cl.duoc.tiotec.ui.screens.dispositivos.DispositivosScreen
+import cl.duoc.tiotec.ui.screens.perfil.PerfilScreen
 
 /**
  * Punto central de navegación.
  * - NavHost decide qué pantalla mostrar según la ruta actual.
  * - La barra inferior solo aparece en las 5 secciones principales.
- * - Por ahora cada pantalla es provisoria; se reemplaza cuando la terminamos.
+ * - Entre pantallas hay una transición de fundido (enterTransition / exitTransition).
  */
 @Composable
 fun AppNavigation() {
@@ -42,20 +49,19 @@ fun AppNavigation() {
         NavHost(
             navController = navController,
             startDestination = Ruta.Perfil.ruta,
-            modifier = Modifier.padding(padding)
+            modifier = Modifier.padding(padding),
+            enterTransition = { fadeIn(animationSpec = tween(300)) },
+            exitTransition = { fadeOut(animationSpec = tween(300)) }
         ) {
             composable(Ruta.Perfil.ruta) {
-                PantallaEnConstruccion(
-                    titulo = Ruta.Perfil.titulo,
-                    acciones = listOf(
-                        AccionProvisoria("Continuar") {
-                            // popUpTo con inclusive = true: al volver atrás desde Inicio
-                            // la app se cierra en vez de regresar al formulario de perfil.
-                            navController.navigate(Ruta.Inicio.ruta) {
-                                popUpTo(Ruta.Perfil.ruta) { inclusive = true }
-                            }
+                PerfilScreen(
+                    alTerminar = {
+                        // popUpTo con inclusive = true: al volver atrás desde Inicio
+                        // la app se cierra en vez de regresar al formulario de perfil.
+                        navController.navigate(Ruta.Inicio.ruta) {
+                            popUpTo(Ruta.Perfil.ruta) { inclusive = true }
                         }
-                    )
+                    }
                 )
             }
 
@@ -91,10 +97,19 @@ fun AppNavigation() {
 
             composable(Ruta.Acciones.ruta) { PantallaEnConstruccion(titulo = Ruta.Acciones.titulo) }
             composable(Ruta.Historial.ruta) { PantallaEnConstruccion(titulo = Ruta.Historial.titulo) }
-            composable(Ruta.Dispositivos.ruta) { PantallaEnConstruccion(titulo = Ruta.Dispositivos.titulo) }
-            composable(Ruta.Aprende.ruta) { PantallaEnConstruccion(titulo = Ruta.Aprende.titulo) }
-            composable(Ruta.Asistencia.ruta) { PantallaEnConstruccion(titulo = Ruta.Asistencia.titulo) }
+            composable(Ruta.Dispositivos.ruta) { DispositivosScreen() }
+            composable(Ruta.Aprende.ruta) { AprendeScreen() }
+            composable(Ruta.Asistencia.ruta) { AsistenciaScreen() }
         }
+    }
+}
+
+/** Navega a una sección principal sin apilar la misma pantalla muchas veces. */
+fun NavHostController.irASeccion(ruta: String) {
+    navigate(ruta) {
+        popUpTo(Ruta.Inicio.ruta) { saveState = true }
+        launchSingleTop = true
+        restoreState = true
     }
 }
 
@@ -104,14 +119,7 @@ private fun BarraInferior(navController: NavHostController, rutaActual: String?)
         itemsBarraInferior.forEach { item ->
             NavigationBarItem(
                 selected = rutaActual == item.ruta.ruta,
-                onClick = {
-                    navController.navigate(item.ruta.ruta) {
-                        // Evita apilar la misma sección muchas veces al tocar la barra
-                        popUpTo(Ruta.Inicio.ruta) { saveState = true }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
+                onClick = { navController.irASeccion(item.ruta.ruta) },
                 icon = { Icon(imageVector = item.icono, contentDescription = item.ruta.titulo) },
                 label = { Text(item.ruta.titulo) }
             )
