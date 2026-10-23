@@ -19,12 +19,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import cl.duoc.tiotec.ui.components.AccionProvisoria
-import cl.duoc.tiotec.ui.components.PantallaEnConstruccion
+import cl.duoc.tiotec.ui.screens.acciones.AccionesScreen
 import cl.duoc.tiotec.ui.screens.aprende.AprendeScreen
 import cl.duoc.tiotec.ui.screens.asistencia.AsistenciaScreen
 import cl.duoc.tiotec.ui.screens.dispositivos.DispositivosScreen
+import cl.duoc.tiotec.ui.screens.evaluacion.EvaluacionScreen
+import cl.duoc.tiotec.ui.screens.historial.HistorialScreen
+import cl.duoc.tiotec.ui.screens.inicio.InicioScreen
 import cl.duoc.tiotec.ui.screens.perfil.PerfilScreen
+import cl.duoc.tiotec.ui.screens.resultado.ResultadoScreen
 
 /**
  * Punto central de navegación.
@@ -66,23 +69,17 @@ fun AppNavigation() {
             }
 
             composable(Ruta.Inicio.ruta) {
-                PantallaEnConstruccion(
-                    titulo = Ruta.Inicio.titulo,
-                    acciones = listOf(
-                        AccionProvisoria("Ver historial") { navController.navigate(Ruta.Historial.ruta) },
-                        AccionProvisoria("Pedir asistencia") { navController.navigate(Ruta.Asistencia.ruta) }
-                    )
+                InicioScreen(
+                    irAEvaluar = { navController.irASeccion(Ruta.Evaluacion.ruta) },
+                    irAAcciones = { navController.irASeccion(Ruta.Acciones.ruta) },
+                    irAHistorial = { navController.navigate(Ruta.Historial.ruta) },
+                    irAAsistencia = { navController.navigate(Ruta.Asistencia.ruta) }
                 )
             }
 
             composable(Ruta.Evaluacion.ruta) {
-                PantallaEnConstruccion(
-                    titulo = Ruta.Evaluacion.titulo,
-                    acciones = listOf(
-                        AccionProvisoria("Ver resultado de prueba") {
-                            navController.navigate(Ruta.Resultado.crear(evaluacionId = 0))
-                        }
-                    )
+                EvaluacionScreen(
+                    alTerminar = { id -> navController.navigate(Ruta.Resultado.crear(id)) }
                 )
             }
 
@@ -92,11 +89,17 @@ fun AppNavigation() {
                 arguments = listOf(navArgument("evaluacionId") { type = NavType.LongType })
             ) { entrada ->
                 val evaluacionId = entrada.arguments?.getLong("evaluacionId") ?: 0L
-                PantallaEnConstruccion(titulo = "Resultado #$evaluacionId")
+                ResultadoScreen(
+                    evaluacionId = evaluacionId,
+                    verAcciones = { navController.irASeccion(Ruta.Acciones.ruta) },
+                    volverAlInicio = { navController.irASeccion(Ruta.Inicio.ruta) }
+                )
             }
 
-            composable(Ruta.Acciones.ruta) { PantallaEnConstruccion(titulo = Ruta.Acciones.titulo) }
-            composable(Ruta.Historial.ruta) { PantallaEnConstruccion(titulo = Ruta.Historial.titulo) }
+            composable(Ruta.Acciones.ruta) { AccionesScreen() }
+            composable(Ruta.Historial.ruta) {
+                HistorialScreen(verResultado = { id -> navController.navigate(Ruta.Resultado.crear(id)) })
+            }
             composable(Ruta.Dispositivos.ruta) { DispositivosScreen() }
             composable(Ruta.Aprende.ruta) { AprendeScreen() }
             composable(Ruta.Asistencia.ruta) { AsistenciaScreen() }
