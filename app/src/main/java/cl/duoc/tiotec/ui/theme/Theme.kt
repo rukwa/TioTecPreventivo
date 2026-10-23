@@ -1,57 +1,67 @@
 package cl.duoc.tiotec.ui.theme
 
-import android.app.Activity
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
-)
-
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
+// Esquema de colores Material 3 para modo claro
+private val EsquemaClaro = lightColorScheme(
+    primary = AzulTioTec,
     onPrimary = Color.White,
+    primaryContainer = AzulTioTecClaro,
+    onPrimaryContainer = AzulTioTecOscuro,
+    secondary = VerdeSeguro,
     onSecondary = Color.White,
+    secondaryContainer = VerdeSeguroClaro,
+    onSecondaryContainer = VerdeSeguroOscuro,
+    tertiary = AmbarAlerta,
     onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    tertiaryContainer = AmbarAlertaClaro,
+    onTertiaryContainer = AmbarAlertaOscuro,
+    error = RojoRiesgo,
+    onError = Color.White,
+    background = FondoClaro,
+    onBackground = TextoClaro,
+    surface = FondoClaro,
+    onSurface = TextoClaro
 )
 
+// Esquema de colores Material 3 para modo oscuro (tonos más claros sobre fondo oscuro)
+private val EsquemaOscuro = darkColorScheme(
+    primary = Color(0xFFADC6FF),
+    onPrimary = Color(0xFF002E69),
+    primaryContainer = Color(0xFF004494),
+    onPrimaryContainer = AzulTioTecClaro,
+    secondary = Color(0xFF9CD69B),
+    onSecondary = Color(0xFF00390F),
+    secondaryContainer = Color(0xFF15521F),
+    onSecondaryContainer = VerdeSeguroClaro,
+    tertiary = Color(0xFFFFB955),
+    onTertiary = Color(0xFF462A00),
+    tertiaryContainer = Color(0xFF643F00),
+    onTertiaryContainer = AmbarAlertaClaro,
+    error = Color(0xFFFFB4AB),
+    onError = Color(0xFF690005),
+    background = FondoOscuro,
+    onBackground = TextoOscuro,
+    surface = FondoOscuro,
+    onSurface = TextoOscuro
+)
+
+/**
+ * Tema de la app. No usamos "dynamic color" (colores del fondo de pantalla del usuario)
+ * para que la identidad de TíoTec y los colores de riesgo se vean siempre iguales.
+ */
 @Composable
 fun TioTecPreventivoTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
-
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = if (darkTheme) EsquemaOscuro else EsquemaClaro,
         typography = Typography,
         content = content
     )
