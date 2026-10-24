@@ -8,6 +8,9 @@
         android:required="false" />
     <uses-permission android:name="android.permission.CAMERA" />
 
+    <!-- Notificaciones de recordatorio (desde Android 13 se piden en tiempo de ejecución) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
         android:name=".TioTecApp"
         android:allowBackup="true"

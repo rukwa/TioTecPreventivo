@@ -7,6 +7,7 @@ import cl.duoc.tiotec.data.repository.DispositivoRepository
 import cl.duoc.tiotec.data.repository.EvaluacionRepository
 import cl.duoc.tiotec.data.repository.PerfilRepository
 import cl.duoc.tiotec.data.repository.SolicitudRepository
+import cl.duoc.tiotec.utils.Notificaciones
 
 /**
  * Clase Application: se crea una sola vez cuando abre la app.
@@ -19,6 +20,12 @@ import cl.duoc.tiotec.data.repository.SolicitudRepository
  * Requiere android:name=".TioTecApp" en el AndroidManifest.xml.
  */
 class TioTecApp : Application() {
+
+    override fun onCreate() {
+        super.onCreate()
+        // El canal de notificaciones debe existir antes de mostrar cualquier aviso
+        Notificaciones.crearCanal(this)
+    }
 
     val baseDeDatos: AppDatabase by lazy { AppDatabase.obtener(this) }
 
