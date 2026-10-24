@@ -5,13 +5,13 @@ plugins {
 }
 
 android {
-    namespace = "com.duoc.tiotecpreventivo"
+    namespace = "cl.duoc.tiotec"
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
-        applicationId = "com.duoc.tiotecpreventivo"
+        applicationId = "cl.duoc.tiotec"
         minSdk = 26
         targetSdk = 37
         versionCode = 1
@@ -46,14 +46,6 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    testImplementation(libs.junit)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(libs.androidx.junit)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-
     // Navegación entre pantallas
     implementation(libs.androidx.navigation.compose)
     // ViewModel en Compose y collectAsStateWithLifecycle
@@ -67,4 +59,11 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     // Íconos de Material (Error, Checklist, Shield, PhoneAndroid, etc.)
     implementation(libs.androidx.compose.material.icons.extended)
+    testImplementation(libs.junit)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.junit)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    debugImplementation(libs.androidx.compose.ui.tooling)
 }
