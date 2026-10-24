@@ -16,16 +16,21 @@ import androidx.room.RoomDatabase
 @Database(
     entities = [
         EvaluacionEntity::class,
-        AccionEntity::class
-        // Miércoles (Matías): PerfilEntity::class, DispositivoEntity::class, SolicitudEntity::class
+        AccionEntity::class,
+        PerfilEntity::class,
+        DispositivoEntity::class,
+        SolicitudEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun evaluacionDao(): EvaluacionDao
     abstract fun accionDao(): AccionDao
+    abstract fun perfilDao(): PerfilDao
+    abstract fun dispositivoDao(): DispositivoDao
+    abstract fun solicitudDao(): SolicitudDao
 
     companion object {
         // Una sola instancia para toda la app (patrón Singleton)
